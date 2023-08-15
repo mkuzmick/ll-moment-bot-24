@@ -1,0 +1,85 @@
+{
+    "display_information": {
+        "name": "ll-moment-bot",
+        "description": "a bot that handles moments",
+        "background_color": "#111112"
+    },
+    "features": {
+        "app_home": {
+            "home_tab_enabled": true,
+            "messages_tab_enabled": false,
+            "messages_tab_read_only_enabled": false
+        },
+        "bot_user": {
+            "display_name": "ll-moment-bot",
+            "always_online": true
+        },
+        "slash_commands": [
+            {
+                "command": "/moment",
+                "description": "registers a moment",
+                "usage_hint": "[title or tags]",
+                "should_escape": false
+            }
+        ]
+    },
+    "oauth_config": {
+        "scopes": {
+            "user": [
+                "files:read",
+                "files:write"
+            ],
+            "bot": [
+                "files:read",
+                "files:write",
+                "reactions:read",
+                "reactions:write",
+                "channels:history",
+                "channels:read",
+                "chat:write",
+                "app_mentions:read",
+                "emoji:read",
+                "groups:history",
+                "groups:read",
+                "im:write",
+                "im:read",
+                "im:history",
+                "mpim:history",
+                "mpim:write",
+                "mpim:read",
+                "reminders:read",
+                "reminders:write",
+                "commands",
+                "pins:read"
+            ]
+        }
+    },
+    "settings": {
+        "event_subscriptions": {
+            "bot_events": [
+                "app_mention",
+                "file_change",
+                "file_created",
+                "file_deleted",
+                "file_public",
+                "file_shared",
+                "file_unshared",
+                "message.channels",
+                "message.groups",
+                "message.im",
+                "message.mpim",
+                "pin_added",
+                "pin_removed",
+                "reaction_added",
+                "reaction_removed"
+            ]
+        },
+        "interactivity": {
+            "is_enabled": true,
+            "request_url": "https://ll-moment-bot.herokuapp.com/slack/events"
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": true,
+        "token_rotation_enabled": false
+    }
+}

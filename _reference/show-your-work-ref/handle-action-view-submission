@@ -1,0 +1,62 @@
+const { findRecordByValue, findRecordById, addRecord } = require('../utilities/airtable-tools')
+const { magenta, gray, darkgray, yellow, blue, divider, red } = require('../utilities/mk-loggers')
+
+module.exports = async ({ ack, body, view, client, logger }) => {
+    // Acknowledge the view_submission request
+    ack();
+    red(divider, divider, "action_submission", divider, divider)
+    blue(divider, "view", view)
+    darkgray(divider, "body", body)
+  
+    const name = view['state']['values']['action_title']['plain_text_input-action']['value'];
+    const assignedToSlackIds = view['state']['values']['assigned_to']['multi_users_select-action']['selected_users'];
+    const assignedToAirtableUsers = []
+    for (let i = 0; i < assignedToSlackIds.length; i++) {
+      const slackId = assignedToSlackIds[i];
+      try {
+        const personResult = await findRecordByValue({
+          baseId: process.env.AIRTABLE_22_23_BASE,
+          table: "Users",
+          field: "SlackId",
+          value: slackId
+        })
+        assignedToAirtableUsers.push(personResult.id)
+      } catch (error) {
+        
+      }
+    }
+    const assignedByAirtableUsers = []
+    try {
+      const assignedByResult = await findRecordByValue({
+        baseId: process.env.AIRTABLE_22_23_BASE,
+        table: "Users",
+        field: "SlackId",
+        value: body.user.id
+      })
+      assignedByAirtableUsers.push(assignedByResult.id)
+    } catch (error) {
+      
+    }
+    const notes = view['state']['values']['action_description']['plain_text_input-action']['value'];
+    const temporalStatus = view['state']['values']['action_temporalStatus']['radio_buttons-action']['selected_option']['value'];
+    const actionRecord = {
+      Name: name,
+      AssignedTo: assignedToAirtableUsers,
+      TemporalStatus: temporalStatus,
+      Notes: notes
+    }
+    if (assignedByAirtableUsers) {
+      actionRecord.AssignedBy = assignedByAirtableUsers
+    }
+    magenta(actionRecord)
+    try {
+      const airtableResult = await addRecord({
+        baseId: process.env.AIRTABLE_22_23_BASE,
+              table: "Actions",
+              record: actionRecord
+      })
+      magenta(`saved to airtable`, airtableResult)
+    } catch (error) {
+      
+    }
+}

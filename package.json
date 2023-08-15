@@ -1,0 +1,21 @@
+{
+  "name": "ll-moment-bot-24",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development nodemon ./app.js",
+    "start": "NODE_ENV=production node app.js"
+  },
+  "author": "mk",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/bolt": "^3.13.3",
+    "airtable": "^0.12.1",
+    "atem-connection": "^3.2.0",
+    "dotenv": "^16.3.1",
+    "open-graph-scraper": "^6.2.2",
+    "yargs": "^17.7.2"
+  }
+}
