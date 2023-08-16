@@ -6,6 +6,8 @@ const appHomeHandler = require('./app-home-handler')
 const handleImageFile = require(`../image-bot/external-link-listener`)
 const makeGif = require('../gif-bot/make-gif')
 // const { prepareStepArgs } = require('@slack/bolt/dist/WorkflowStep')
+const momentBot = require('../moment-bot')
+
 
 exports.fileShared = async ({ event, client}) => {
   try {
@@ -48,6 +50,16 @@ exports.fileShared = async ({ event, client}) => {
 exports.reactionAdded = async ({ event }) => {
   yellow(`got a reactionAdded: ${event.type}:`)
   cyan(event)
+  if (BOT_CONFIG.channels.includes(event.item.channel)) {
+    blue(`handling message because ${event.item.channel} is one of \n${JSON.stringify(BOT_CONFIG.channels, null, 4)}`)
+    yellow(event)
+    const result = await momentBot.momentReactionToAirtable(event);
+    blue(result)
+  } else {
+      magenta(`some other event we aren't handling now`)
+      blue(`event channel wasn't in array ${JSON.stringify(BOT_CONFIG.channels, null, 4)}`)
+      yellow(event)
+  }
 }
 
 exports.reactionRemoved = async ({ event }) => {
@@ -57,7 +69,7 @@ exports.reactionRemoved = async ({ event }) => {
 
 exports.appHomeOpened = appHomeHandler
 
-exports.log = async ({ event }) => {
+exports.parseAll = async ({ event }) => {
   const handledEvents = ["message","reaction_added", "reaction_removed", "app_home_opened", "file_shared"]
   if (handledEvents.includes(event.type)) {
     blue(`got an event of type ${event.type}, handling this elsewhere`)
@@ -66,31 +78,6 @@ exports.log = async ({ event }) => {
     yellow(`currently unhandled event of type ${event.type}:`)
     cyan(JSON.stringify(event))
   }
+  const result = await momentBot.momentEventToAirtable(event)
 }
 
-
-// from pumpkin
-// 
-// const fileShared = async ({ event, client}) => {
-//   try {
-//     // if imageRegex.test(event.)
-//     llog.gray(llog.divider, `launching fileShared handler with event:`, event)
-//     const fileInfo = await client.files.info({
-//       file: event.file_id,
-//     });
-//     llog.yellow("fileInfo:", fileInfo)
-//     if (event.channel_id==process.env.SLACK_WORK_CHANNEL && imageRegex.test(fileInfo.file.mimetype) ) {
-//       llog.magenta(`received file in the work channel: ${event.file_id}\ngoing to hand off to the image-bot\n\n`)
-//       let imageBotResult = await imageBot({ event: event, client: client, fileInfo: fileInfo})
-//     } else {
-//       llog.gray(`file shared in non-work channel, we'll leave it alone for now`)
-//     }
-//   } catch (error) {
-//     llog.red(`eventHandler.fileShared failed`)
-//     llog.red(error)
-//     console.error(error)
-//   }
-// }
-
-
-// module.exports = fileShared

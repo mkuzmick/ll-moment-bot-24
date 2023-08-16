@@ -15,7 +15,7 @@ async function getOneBaseConfig(options) {
     next()
   })
   .catch(err=>{console.error(err); return})
-  console.log(JSON.stringify(theRecords, null, 4))
+  // console.log(JSON.stringify(theRecords, null, 4))
   return theRecords;
 }
 
@@ -25,7 +25,7 @@ module.exports = async function(options) {
     baseId: process.env.AIRTABLE_MOMENTS_BASE,
     table: "_CHANNELCONFIG"
   })
-  console.log(JSON.stringify(theRecords, null, 4))
+  // console.log(JSON.stringify(theRecords, null, 4))
   return theRecords;
 }
 

@@ -28,7 +28,7 @@ const app = new App({
     port: process.env.PORT || 3000
   });
 
-app.message('hello', messageHandler.hello);
+app.message('testing testing', messageHandler.hello);
 app.message(/.*/, noBotMessages, messageHandler.parseAll);
 
 app.command('/moment', momentBot.momentSlash);
@@ -40,7 +40,7 @@ app.event("reaction_removed", eventHandler.reactionRemoved);
 // app.event('pin_removed', eventHandler.pinRemoved);
 // app.event('app_home_opened', eventHandler.appHomeOpened);
 // app.event('message', eventHandler.message);
-app.event(/.*/, eventHandler.log);
+app.event(/.*/, eventHandler.parseAll);
 
 app.action(everything, actionHandler.log);
 // app.action(/atem/, actionHandler.atemButtons)
@@ -55,7 +55,8 @@ app.action(everything, actionHandler.log);
   llog.yellow(process.env.SLACK_APP_TOKEN)
   llog.magenta(`starting app in ${process.env.NODE_ENV} mode`)
   global.BOT_CONFIG = await getAirtableConfig();
-  llog.blue(BOT_CONFIG)
+  BOT_CONFIG.channels = BOT_CONFIG.map(e => e.fields.SlackId)
+  // llog.blue(BOT_CONFIG)
   await app.start(process.env.PORT || 3000);
   try {
     await app.client.chat.postMessage({

@@ -59,6 +59,20 @@ const momentSlash = async ({ command, ack, client}) => {
             text: "if you see this, the logging machine can't work in this context",
             blocks: blocks
         })
+        llog.magenta(result)
+        let theRecord = {
+            SlackTs: result.ts,
+            UserId: command.user_id || "NA",
+            SlackChannelId: command.channel_id || "NA" ,
+            SlackCommandJSON: JSON.stringify(command, null, 4),
+            SlackMessageJSON: JSON.stringify(result, null, 4)
+        }
+        let theResult = await airtableTools.addRecord({
+            baseId: process.env.AIRTABLE_MOMENTS_BASE,
+            table: "SlackMomentSlashSessions",
+            record: theRecord
+        })
+        return(theResult)
     } catch (error) {
         llog.red(`couldn't post message in response to moment slash`, error )
     }
@@ -67,5 +81,61 @@ const momentSlash = async ({ command, ack, client}) => {
 
 }
 
+const momentEventToAirtable = async (event) => {
+    let theRecord = {
+        EventType: event.type,
+        UserId: event.user || "NA",
+        SlackChannelId: (event.item && event.item.channel) || "NA" ,
+        SlackEventTs: event.event_ts,
+        SlackJSON: JSON.stringify(event, null, 4)
+    }
+    let theResult = await airtableTools.addRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "SlackEvents",
+        record: theRecord
+    })
+    llog.cyan(result)
+
+}
+
+const momentMessageToAirtable = async (message) => {
+    let theRecord = {
+        SlackTs: message.ts,
+        Text: message.text || "",
+        UserId: message.user,
+        SlackChannel: message.channel,
+        SlackJSON: JSON.stringify(message, null, 4)
+    }
+    let theResult = await airtableTools.addRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "SlackMessages",
+        record: theRecord
+    })
+    return(theResult)
+}
+
+const momentReactionToAirtable = async (event) => {
+    let theRecord = {
+        EventType: event.type,
+        UserId: event.user,
+        Reaction: event.reaction,
+        OriginalItemTs: event.item.ts,
+        SlackChannelId: event.item.channel,
+        OriginalItemType: event.item.type,
+        OriginalItemUser: event.item_user,
+        SlackEventTs: event.event_ts,
+        SlackJSON: JSON.stringify(event, null, 4)
+    }
+    let theResult = await airtableTools.addRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "SlackReactions",
+        record: theRecord
+    })
+    return(`finished momentMessageToAirtable`)
+}
+
 
 module.exports.momentSlash = momentSlash
+module.exports.momentMessageToAirtable = momentMessageToAirtable
+module.exports.momentReactionToAirtable = momentReactionToAirtable
+module.exports.momentEventToAirtable = momentEventToAirtable

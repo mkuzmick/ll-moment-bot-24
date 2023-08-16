@@ -1,6 +1,16 @@
 const Airtable = require(`airtable`)
 const { red, cyan, blue, yellow } = require(`../ll-utilities/mk-utilities`)
 
+/**
+ * Adds a record to a specified Airtable base and table.
+ * 
+ * @param {Object} options - The options for adding the record.
+ * @param {string} options.baseId - The ID of the Airtable base.
+ * @param {string} options.table - The name of the table in the base.
+ * @param {Object} options.record - The record data to be added.
+ * 
+ * @returns {Object} The result from Airtable after adding the record.
+ */
 module.exports.addRecord = async function(options){
   var base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base(options.baseId);
   var airtableResult = await base(options.table).create(options.record).then(result => {
@@ -14,6 +24,7 @@ module.exports.addRecord = async function(options){
     });
   return airtableResult;
 }
+
 
 module.exports.findOneById = async function(options) {
   var result = await options.base(options.table)
