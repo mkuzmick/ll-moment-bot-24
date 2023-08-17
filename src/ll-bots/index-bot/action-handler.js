@@ -7,8 +7,8 @@ const Airtable = require('airtable')
 
 module.exports.log = async ({ payload, body, context, ack }) => {
     await ack()
-    gray(payload)
-    gray(body)
+    blue("payload:", payload)
+    gray("body", body)
 }
 
 

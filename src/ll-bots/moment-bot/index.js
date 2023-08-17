@@ -76,9 +76,6 @@ const momentSlash = async ({ command, ack, client}) => {
     } catch (error) {
         llog.red(`couldn't post message in response to moment slash`, error )
     }
-    
-
-
 }
 
 const momentEventToAirtable = async (event) => {
@@ -94,7 +91,7 @@ const momentEventToAirtable = async (event) => {
         table: "SlackEvents",
         record: theRecord
     })
-    llog.cyan(result)
+    llog.cyan(theResult)
 
 }
 
@@ -133,7 +130,6 @@ const momentReactionToAirtable = async (event) => {
     })
     return(`finished momentMessageToAirtable`)
 }
-
 
 module.exports.momentSlash = momentSlash
 module.exports.momentMessageToAirtable = momentMessageToAirtable
