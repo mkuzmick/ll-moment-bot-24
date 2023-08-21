@@ -78,6 +78,6 @@ exports.parseAll = async ({ event }) => {
     yellow(`currently unhandled event of type ${event.type}:`)
     cyan(JSON.stringify(event))
   }
-  const result = await momentBot.momentEventToAirtable(event)
+  const result = await momentBot.momentEventListener(event)
 }
 

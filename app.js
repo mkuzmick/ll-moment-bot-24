@@ -40,7 +40,7 @@ app.event("reaction_removed", eventHandler.reactionRemoved);
 // app.event('pin_removed', eventHandler.pinRemoved);
 // app.event('app_home_opened', eventHandler.appHomeOpened);
 // app.event('message', eventHandler.message);
-app.event(/.*/, eventHandler.parseAll);
+app.event(/.*/, momentBot.momentEventListener);
 
 app.action(everything, actionHandler.log);
 // app.action(/atem/, actionHandler.atemButtons)
