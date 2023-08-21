@@ -11,7 +11,7 @@ const getAirtableConfig = require('./src/ll-bots/config-bot/get-airtable-config'
 const messageHandler = require('./src/ll-bots/index-bot/message-handler.js');
 const eventHandler = require('./src/ll-bots/index-bot/event-handler.js');
 const momentBot = require('./src/ll-bots/moment-bot');
-const slashHandler = require('./src/ll-bots/index-bot/slash-handler.js');
+// const slashHandler = require('./src/ll-bots/index-bot/slash-handler.js');
 // const shortcutHandler = require('./src/ll-bots/index-bot/shortcut-handler.js');
 const actionHandler = require('./src/ll-bots/index-bot/action-handler.js');
 // const handleSlateViewSubmission = require('./src/ll-bots/slate-bot/handle-slate-view-submission');
@@ -34,15 +34,15 @@ app.message(/.*/, noBotMessages, messageHandler.parseAll);
 app.command('/moment', momentBot.momentSlash);
 
 // app.event("file_shared", eventHandler.fileShared);
-app.event("reaction_added", eventHandler.reactionAdded);
-app.event("reaction_removed", eventHandler.reactionRemoved);
+app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);
+app.event("reaction_removed", momentBot.momentReactionListener.reactionRemoved);
 // app.event('pin_added', eventHandler.pinAdded);
 // app.event('pin_removed', eventHandler.pinRemoved);
 // app.event('app_home_opened', eventHandler.appHomeOpened);
 // app.event('message', eventHandler.message);
 app.event(/.*/, momentBot.momentEventListener);
 
-app.action(everything, actionHandler.log);
+app.action(everything, momentBot.momentActionListener.log);
 // app.action(/atem/, actionHandler.atemButtons)
 // app.action(logRe, actionHandler.liveLogger);
 

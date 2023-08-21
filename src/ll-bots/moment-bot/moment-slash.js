@@ -1,4 +1,6 @@
 const { llog } = require('../../ll-modules/ll-utilities')
+const randomMoment = require('./random-moment')
+const airtableTools = require(`../../ll-modules/ll-airtable-tools`)
 
 const momentSlash = async ({ command, ack, client}) => {
     llog.red(llog.divider, JSON.stringify(global.BOT_CONFIG, null, 4), llog.divider)
@@ -75,3 +77,5 @@ const momentSlash = async ({ command, ack, client}) => {
         llog.red(`couldn't post message in response to moment slash`, error )
     }
 }
+
+module.exports = momentSlash;
