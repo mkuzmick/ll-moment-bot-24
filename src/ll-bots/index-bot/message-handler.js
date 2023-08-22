@@ -18,7 +18,7 @@ exports.parseAll = async ({ message, say }) => {
     if (BOT_CONFIG.channels.includes(message.channel)) {
         blue(`handling message because ${message.channel} is one of \n${JSON.stringify(BOT_CONFIG.channels, null, 4)}`)
         yellow(message)
-        const result = await momentBot.momentMessageToAirtable(message);
+        const result = await momentBot.momentMessageListener(message);
         blue(result)
     } else {
         magenta(`some other message we aren't handling now--uncomment message-handler line 27 to get the json`)
