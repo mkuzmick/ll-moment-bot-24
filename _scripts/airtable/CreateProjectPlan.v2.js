@@ -29,12 +29,12 @@ async function recordIdToObject(myTable, recordId) {
     return recordObject;
 }
 
-const createHackMd = async ({project, HACKMD_API_KEY, HACKMD_TEAM}) => {
-    
+const createProjectBook = async ({project, HACKMD_API_KEY, HACKMD_TEAM}) => {
+    output.inspect(project)
     let payload = {
-        title: `new project plan book for ${project.ProjectPlanName || "no title"}`,
+        title: `new project plan book for ${project.ProjectPlan[0].name || "no title"}`,
         content: `
-${project.ProjectPlanName} Book
+${project.ProjectPlan[0].name} Book
 ===
 
 main docs
@@ -74,8 +74,8 @@ reference
 async function createProjectPlan (project) {
     let table = base.getTable("ProjectPlans");
     let record = await table.createRecordAsync({
-        "ProjectPlanName" = project.Id,
-        "_PROJECTS" = [{id: project.airtableRecordId}]
+        "ProjectPlanName": project.Id,
+        // "_PROJECTS": [{id: project.airtableRecordId}]
     })
     return recordIdToObject(table, record)
 }
@@ -134,9 +134,10 @@ output.inspect(project)
 output.markdown(`# start\nBefore we can create the template, we need to know the type. Please select from the list below and we'll create the appropriate documents for you.`)
 
 // maybe don't mutate the project in the function?
-let projectWithPlanAndDocs = await generateWorkingDocs(projectWithPlan);
-output.inspect(newProject)
+let projectWithPlanAndDocs = await generateWorkingDocs(project);
+output.inspect(projectWithPlanAndDocs)
 
+let projectBookId = await createProjectBook({project: projectWithPlanAndDocs, HACKMD_API_KEY: CONFIG.HACKMD_API_KEY, HACKMD_TEAM: CONFIG.HACKMD_TEAM });
 // let hackMdResult = await createProjectBook({
 //     HACKMD_TEAM: CONFIG.HACKMD_TEAM,
 //     HACKMD_API_KEY: CONFIG.HACKMD_API_KEY,
