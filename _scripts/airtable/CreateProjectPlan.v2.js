@@ -1,3 +1,5 @@
+let desiredConfig = "MK_CONFIG"
+
 const getConfig = async () => {
     let launchDate = new Date();
     let configTable = base.getTable("Config");
@@ -7,6 +9,9 @@ const getConfig = async () => {
     config.launchTs = launchDate.getTime();
     return config
 }
+
+let CONFIG = await getConfig()
+// output.inspect(CONFIG)
 
 async function recordIdToObject(myTable, recordId) {
     // Fetch the record using the provided recordId
@@ -29,6 +34,7 @@ async function recordIdToObject(myTable, recordId) {
     return recordObject;
 }
 
+// rewrite to add all links to all task docs
 const createProjectBook = async ({project, HACKMD_API_KEY, HACKMD_TEAM}) => {
     output.inspect(project)
     let payload = {
@@ -80,13 +86,56 @@ async function createProjectPlan (project) {
     return recordIdToObject(table, record)
 }
 
-const generateDocAndTask = async ({project, typeId}) => {
+const generateDocAndTask = async ({projectForDocsAndTasks, typeId}) => {
+    let result = {createdTime: (new Date()).getTime()};
     let templateTable = base.getTable("DocTemplates");
     let workingDocsTable = base.getTable('WorkingDocs');
     let tasksTable = base.getTable('Tasks');
-    let taskTemplate = await templateTable.selectRecordAsync(typeId)
-    output.text(`going to create ${taskTemplate.getCellValue("TaskTypeName")}`)
-    return taskTemplate.getCellValueAsString("TaskTypeName")
+
+    // create task first
+
+    // create doc
+    let docTemplate = await templateTable.selectRecordAsync(typeId);
+    output.inspect(docTemplate)
+    let docTemplateObject = await recordIdToObject(templateTable, docTemplate.id);
+    output.inspect(docTemplateObject);
+    output.text(`going to create ${docTemplate.getCellValue("TaskTypeName")}`)
+    output.inspect(projectForDocsAndTasks)
+    output.text(JSON.stringify(projectForDocsAndTasks, null, 4))
+    let payload = {
+        title: `new ${docTemplate.getCellValue("TaskTypeName")} for ${projectForDocsAndTasks.projectPlan.ProjectPlanName || "no title"}`,
+        content: `
+---
+tags: ${docTemplate.getCellValue("TaskTypeName")}, document
+---
+# new ${docTemplate.getCellValue("TaskTypeName")} for ${projectForDocsAndTasks.projectPlan.ProjectPlanName || "no title"}
+
+${docTemplate.getCellValue("TemplateMarkdown") || ""}
+`, 
+        readPermission: "owner",
+        writePermission: "owner"
+    }
+
+    output.inspect(payload)
+    
+    let response = await remoteFetchAsync(`https://api.hackmd.io/v1/teams/${CONFIG.HACKMD_TEAM}/notes`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${CONFIG.HACKMD_API_KEY}`,
+            "Content-Type": "application/json" 
+        },
+        body: JSON.stringify(payload) 
+    });
+    if (response.ok) {
+        let data = await response.json();
+        output.inspect(data);
+        result.workingDoc = data
+    } else {
+        return "error creating HackMd"
+    }
+    
+
+    return result
 }
 
 const generateWorkingDocs = async (project) => {
@@ -101,7 +150,7 @@ const generateWorkingDocs = async (project) => {
         return project
     } else {
         let taskResult = await generateDocAndTask({
-            project: project, typeId: templateChoice
+            projectForDocsAndTasks: project, typeId: templateChoice
         })
         project.tasks.push(taskResult)
         return generateWorkingDocs(project)
@@ -114,13 +163,10 @@ const generateWorkingDocs = async (project) => {
     return templateChoice
 }
 
-let desiredConfig = "MK_CONFIG"
 // If this script is run from a button field, this will use the button's record instead.
 let table = base.getTable('_PROJECTS');
 let record = await input.recordAsync('Select a record to use', table);
 
-let CONFIG = await getConfig()
-// output.inspect(CONFIG)
 
 
 let project = await recordIdToObject(table, record.id)
