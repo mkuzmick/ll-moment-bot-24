@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.10">
+    <resources>
+        <format name="FFVideoFormat1080p24" id="r0" width="1920" frameDuration="1/24s" height="1080"/>
+        <effect uid="FFColorCorrectionHDREffect" name="Color Correction" id="r2"/>
+        <effect uid="FxPlug:920273EF-948C-4556-8EB8-8EFEF7A34111" name="Color Curves" id="r3"/>
+        <asset hasAudio="1" audioChannels="2" format="r0" name="20230905.99.0958_LL.Show.AllDay_a8k.a.h264.0001.mp4" duration="10578/1s" audioSources="1" id="r1" start="409985/12s" hasVideo="1">
+            <media-rep kind="original-media" src="file:///Volumes/SDX-017/20230905.99.0958_LL.Show.AllDay/a8k.a.h264/20230905.99.0958_LL.Show.AllDay_a8k.a.h264.0001.mp4"/>
+            <media-rep kind="proxy-media" src="file:///Volumes/SDX-017/20230905.99.0958_LL.Show.AllDay/a8k.a.h264/20230905.99.0958_LL.Show.AllDay_a8k.a.h264.0001.mp4"/>
+        </asset>
+    </resources>
+    <library>
+        <event name="gif 1 (Resolve)">
+            <project name="gif 1 (Resolve)">
+                <sequence format="r0" tcFormat="NDF" duration="1/1s" tcStart="0/1s">
+                    <spine>
+                        <asset-clip enabled="1" offset="0/1s" format="r0" tcFormat="NDF" ref="r1" name="20230905.99.0958_LL.Show.AllDay_a8k.a.h264.0001.mp4" duration="1/1s" start="313283/8s">
+                            <adjust-conform type="fit"/>
+                            <adjust-transform anchor="0 0" position="0 0" scale="1 1"/>
+                        </asset-clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
