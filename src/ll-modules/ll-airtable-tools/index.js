@@ -25,6 +25,25 @@ module.exports.addRecord = async function(options){
   return airtableResult;
 }
 
+module.exports.updateRecord = async function(options) {
+  var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(options.baseId);
+  
+  var recordId = options.recordId; // ID of the record you want to update
+  var updatedFields = options.updatedFields; // Updated field values for the record
+
+  var airtableResult = await base(options.table).update(recordId, updatedFields).then(result => {
+    console.log("updated record in Airtable");
+    return result;
+  })
+  .catch(err => {
+    console.log("\nthere was an error with the AT update\n");
+    console.error(err);
+    return;
+  });
+
+  return airtableResult;
+}
+
 
 module.exports.findOneById = async function(options) {
   var result = await options.base(options.table)
@@ -35,22 +54,27 @@ module.exports.findOneById = async function(options) {
 
 // options is an object with view, base, value, and table properties
 module.exports.findOneByValue = async function(options) {
+  var base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base(options.baseId);
   theRecords = [];
-  await options.base(options.table).select(
+  try {
+    await base(options.table).select(
     {
       maxRecords: 1,
       view: options.view ? options.view : "Grid view",
       filterByFormula: `${options.field}='${options.value}'`
     }
-  ).eachPage(function page(records, next){
-    theRecords.push(...records);
-    next()
-  })
-  // .then(()=>{
-  //   // return(theRecords);
-  // })
-  .catch(err=>{console.error(err); return})
-  return theRecords[0];
+    ).eachPage(function page(records, next){
+      theRecords.push(...records);
+      next()
+    })
+    // .then(()=>{
+    //   // return(theRecords);
+    // })
+    .catch(err=>{console.error(err); return})
+    return theRecords[0];
+  } catch (error) {
+    return error
+  }
 }
 
 module.exports.findManyByValue = async function(options) {

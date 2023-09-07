@@ -1,6 +1,78 @@
 const airtableTools = require(`../../ll-modules/ll-airtable-tools`)
 const { llog } = require('../../ll-modules/ll-utilities')
 
+async function handleMlaunch (event) {
+    llog.cyan(llog.divider, `got a moment emoji; handling it`, llog.divider)
+    llog.blue(event)
+    // need to track down original item in here too
+    let theRecord = {
+        OriginalItemSlackTs: event.item.ts  || "",
+        MomentEmojiSlackTs: event.event_ts  || "",
+        SlackChannelId: event.item.channel || "",
+        OriginalItemType: event.item.type  || "",
+        OriginalItemUser: event.item_user  || "",
+        SlackJSON: JSON.stringify(event, null, 4),
+        Status: "Launched"
+    }
+    let theResult = await airtableTools.addRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "Moments",
+        record: theRecord
+    })
+    // now let's start a comment thread
+    return theResult
+}
+
+async function handleMstop (event) {
+    // get original record
+    let momentRecord = await airtableTools.findOneByValue({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "Moments",
+        view: "MAIN",
+        field: "OriginalItemSlackTs",
+        value: event.item.ts
+    })
+    let momentUpdate = await airtableTools.updateRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "Moments",
+        view: "MAIN",
+        recordId: momentRecord.id,
+        updatedFields: {
+            Status: "Over",
+            StopTs: event.event_ts
+        }
+    })
+    llog.red(momentUpdate)
+    llog.magenta(momentRecord)
+}
+
+async function handleMstart (event) {
+    // get original record
+    let momentRecord = await airtableTools.findOneByValue({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "Moments",
+        view: "MAIN",
+        field: "OriginalItemSlackTs",
+        value: event.item.ts
+    })
+    let momentUpdate = await airtableTools.updateRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "Moments",
+        view: "MAIN",
+        recordId: momentRecord.id,
+        updatedFields: {
+            Status: "Happening",
+            StartTs: event.event_ts
+        }
+    })
+    llog.red(momentUpdate)
+    llog.magenta(momentRecord)
+}
+
+async function handleMpause (event) {
+
+}
+
 exports.reactionAdded = async ({event}) => {
     llog.yellow(`got a reactionAdded: ${event.type}:`)
     llog.cyan(event)
@@ -24,6 +96,16 @@ exports.reactionAdded = async ({event}) => {
             record: theRecord
         })
         llog.blue(theResult)
+        if (event.reaction == "mlaunch") {
+            llog.magenta(`a moment has been launched`)
+            let mlaunch = await handleMlaunch(event)
+        } else if (event.reaction == "mstart") {
+            llog.green('the moment has begun')
+            let mstart = await handleMstart(event)
+        } else if (event.reaction == "mstop") {
+            llog.red('the moment is over')
+            let mstop = await handleMstop(event)
+        }
         return(`finished momentMessageToAirtable`)
     } else {
         llog.magenta(`some other event we aren't handling now`)
