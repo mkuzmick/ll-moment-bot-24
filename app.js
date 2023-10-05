@@ -11,6 +11,7 @@ const getAirtableConfig = require('./src/ll-bots/config-bot/get-airtable-config'
 const messageHandler = require('./src/ll-bots/index-bot/message-handler.js');
 const eventHandler = require('./src/ll-bots/index-bot/event-handler.js');
 const momentBot = require('./src/ll-bots/moment-bot');
+const openAiBot = require('./src/ll-bots/open-ai-bot');
 // const slashHandler = require('./src/ll-bots/index-bot/slash-handler.js');
 // const shortcutHandler = require('./src/ll-bots/index-bot/shortcut-handler.js');
 const actionHandler = require('./src/ll-bots/index-bot/action-handler.js');
@@ -32,6 +33,7 @@ app.message('testing testing', messageHandler.hello);
 app.message(/.*/, noBotMessages, messageHandler.parseAll);
 
 app.command('/moment', momentBot.momentSlash);
+app.command('/llaitest', )
 
 // app.event("file_shared", eventHandler.fileShared);
 app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);
