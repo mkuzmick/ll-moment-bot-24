@@ -38,7 +38,7 @@ module.exports.transcribeFile = async function (options) {
         path.basename(filePath, path.extname(filePath)) + ".m4a"
     );
 
-    let result = spawnSync('ffmpeg', ['-i', filePath, '-vn', '-b:a', '196k', outputFilePath]);
+    let result = spawnSync('ffmpeg', ['-i', filePath, '-vn', '-b:a', '48k', outputFilePath]);
     if (result.error) {
         throw result.error;
     }
