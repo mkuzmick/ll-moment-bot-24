@@ -73,6 +73,29 @@ async function handleMpause (event) {
 
 }
 
+async function handleStillRequest (event) {
+    // get original record
+    let momentRecord = await airtableTools.findOneByValue({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "Moments",
+        view: "MAIN",
+        field: "OriginalItemSlackTs",
+        value: event.item.ts
+    })
+    let momentUpdate = await airtableTools.updateRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "Moments",
+        view: "MAIN",
+        recordId: momentRecord.id,
+        updatedFields: {
+            Status: "Happening",
+            StartTs: event.event_ts
+        }
+    })
+    llog.red(momentUpdate)
+    llog.magenta(momentRecord)
+}
+
 exports.reactionAdded = async ({event}) => {
     llog.yellow(`got a reactionAdded: ${event.type}:`)
     llog.cyan(event)
@@ -105,6 +128,9 @@ exports.reactionAdded = async ({event}) => {
         } else if (event.reaction == "mstop") {
             llog.red('the moment is over')
             let mstop = await handleMstop(event)
+        } else if (event.reaction == "camera") {
+            llog.green('still requested')
+            let mstill = await handleStillRequest(event)
         }
         return(`finished momentMessageToAirtable`)
     } else {

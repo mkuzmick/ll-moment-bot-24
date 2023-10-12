@@ -11,11 +11,12 @@ const getAirtableConfig = require('./src/ll-bots/config-bot/get-airtable-config'
 const messageHandler = require('./src/ll-bots/index-bot/message-handler.js');
 const eventHandler = require('./src/ll-bots/index-bot/event-handler.js');
 const momentBot = require('./src/ll-bots/moment-bot');
+const openAiBot = require('./src/ll-bots/open-ai-bot');
+const everyMinuteBot = require('./src/ll-bots/every-minute-bot')
 // const slashHandler = require('./src/ll-bots/index-bot/slash-handler.js');
 // const shortcutHandler = require('./src/ll-bots/index-bot/shortcut-handler.js');
 const actionHandler = require('./src/ll-bots/index-bot/action-handler.js');
 // const handleSlateViewSubmission = require('./src/ll-bots/slate-bot/handle-slate-view-submission');
-
 
 const logRe = /^log/;
 const everything = /.*/;
@@ -32,6 +33,7 @@ app.message('testing testing', messageHandler.hello);
 app.message(/.*/, noBotMessages, messageHandler.parseAll);
 
 app.command('/moment', momentBot.momentSlash);
+app.command('/llaitest', )
 
 // app.event("file_shared", eventHandler.fileShared);
 app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);
@@ -67,6 +69,7 @@ app.action(everything, momentBot.momentActionListener.log);
       channel: process.env.SLACK_TESTS_CHANNEL,
       text: `listening to these channels: ${JSON.stringify(BOT_CONFIG.map(e => e.fields.ChannelName), null, 4)}`
     })
+    everyMinuteBot.everyMinuteAction({client: app.client});
   } catch (error) {
     console.error(error)
   }
