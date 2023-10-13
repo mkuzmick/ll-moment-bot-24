@@ -108,10 +108,14 @@ const everyMinuteAction = async ({client}) => {
                     const transcriptionResult = await transcribeFile({ filePath: file })
                     llog.magenta(transcriptionResult)
                     llog.blue(transcriptionResult.text)
-                    const frenchResult = await frenchResponse(transcriptionResult.text)
+                    // const frenchResult = await frenchResponse(transcriptionResult.text)
+                    // const slackResult = await client.chat.postMessage({
+                    //     channel: process.env.SLACK_EVERY_MINUTE_IN_FRENCH_CHANNEL,
+                    //     text: frenchResult.choices[0].message.content
+                    // })
                     const slackResult = await client.chat.postMessage({
-                        channel: process.env.SLACK_EVERY_MINUTE_IN_FRENCH_CHANNEL,
-                        text: frenchResult.choices[0].message.content
+                        channel: process.env.SLACK_EVERY_MINUTE_CHANNEL,
+                        text: transcriptionResult.text
                     })
                 } else {
                     console.log('Less than 1 minute has elapsed since the video timestamp.');

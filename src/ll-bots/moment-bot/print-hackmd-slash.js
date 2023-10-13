@@ -13,7 +13,6 @@ function hackMdIdFromUrl(url) {
     return match ? match[1] : null;
 }
 
-
 const printHackMdSlash = async ({ command, ack, client}) => {
     // llog.red(llog.divider, JSON.stringify(global.BOT_CONFIG, null, 4), llog.divider)
     await ack();
