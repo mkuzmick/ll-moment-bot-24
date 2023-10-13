@@ -3,12 +3,6 @@ const { llog } = require('../../ll-modules/ll-utilities')
 
 
 
-const parseAll = async ({ event }) => {
-    
-}
-  
-  
-
 
 const momentEventListener =  async ({ event }) => {
     const handledEvents = ["message","reaction_added", "reaction_removed", "app_home_opened", "file_shared"]
@@ -21,8 +15,7 @@ const momentEventListener =  async ({ event }) => {
             llog.cyan(JSON.stringify(event))
           }
           llog.red(event)
-      
-          const result = await momentEventListener(event)
+                const result = await momentEventListener(event)
           let theRecord = {
               EventType: event.type,
               UserId: event.user || "NA",

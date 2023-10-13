@@ -1,5 +1,6 @@
 const { App } = require('@slack/bolt');
 var path = require('path');
+var fs = require('fs');
 
 global.ROOT_DIR = path.resolve(__dirname);
 
@@ -33,7 +34,8 @@ app.message('testing testing', messageHandler.hello);
 app.message(/.*/, noBotMessages, messageHandler.parseAll);
 
 app.command('/moment', momentBot.momentSlash);
-app.command('/llaitest', )
+app.command('/print-hackmd', momentBot.printHackMdSlash);
+// app.command('/llaitest', )
 
 // app.event("file_shared", eventHandler.fileShared);
 app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);
@@ -69,6 +71,15 @@ app.action(everything, momentBot.momentActionListener.log);
       channel: process.env.SLACK_TESTS_CHANNEL,
       text: `listening to these channels: ${JSON.stringify(BOT_CONFIG.map(e => e.fields.ChannelName), null, 4)}`
     })
+    try {
+      await app.client.files.upload({
+        channels: process.env.SLACK_HACKMD_TO_PDF_CHANNEL,
+        initial_comment: "this is a test",
+        file: fs.createReadStream(`./_outpdut/bea-001.jpg`)
+      })
+    } catch (error) {
+      console.log(error)
+    }
     everyMinuteBot.everyMinuteAction({client: app.client});
   } catch (error) {
     console.error(error)
