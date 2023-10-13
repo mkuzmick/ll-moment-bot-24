@@ -4,6 +4,7 @@ var figlet = require('figlet');
 var clear = require('clear');
 const { llog } = require('./src/ll-modules/ll-utilities')
 const { transcribeFile } = require('./src/ll-bots/transcription-bot')
+const hackmd2pdf = require('./src/ll-modules/ll-hackmd-tools/hackmd-to-pdf')
 
 require("dotenv").config({ path: __dirname + `/.env.cli` });
 
@@ -18,6 +19,9 @@ if (yargs.transcribe) {
     transcribeFile({filePath: yargs.transcribe})
 } else if (yargs.rename) {
     llog.magenta(`going to rename`, yargs)
-}  else {
+} else if (yargs.phackmd) {
+    llog.magenta(`going to convert ${yargs.phackmd} to markdown`);
+    hackmd2pdf(yargs.phackmd);
+} else {
     console.log(`sorry, you didn't enter a recognized command.`)
 }

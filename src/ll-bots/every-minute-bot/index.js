@@ -28,7 +28,6 @@ function hasTimeElapsed(path, timeInMilliseconds) {
     return false;
 }
 
-
 const transcribeFile = async function (options) {
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY, 
@@ -79,8 +78,6 @@ const transcribeFile = async function (options) {
     return ({ text: transcription.text });
 }
 
-
-
 const everyMinuteAction = async ({client}) => {
     var watcher = chokidar.watch(process.env.OBS_CAPTURE_FOLDER, {ignored: /\.DS_Store/, persistent: true, awaitWriteFinish: true});
     watcher
@@ -130,10 +127,6 @@ const everyMinuteAction = async ({client}) => {
         .on('error', function(error) {console.error('Error happened', error);})
 }
 
-module.exports.everyMinuteAction = everyMinuteAction
-
-
-
 const frenchResponse = async ( text ) => {
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY, 
@@ -159,3 +152,7 @@ const frenchResponse = async ( text ) => {
     });
     return chatCompletion;
 }
+
+module.exports.everyMinuteAction = everyMinuteAction
+
+
