@@ -71,15 +71,6 @@ app.action(everything, momentBot.momentActionListener.log);
       channel: process.env.SLACK_TESTS_CHANNEL,
       text: `listening to these channels: ${JSON.stringify(BOT_CONFIG.map(e => e.fields.ChannelName), null, 4)}`
     })
-    // try {
-    //   await app.client.files.upload({
-    //     channels: process.env.SLACK_HACKMD_TO_PDF_CHANNEL,
-    //     initial_comment: "this is a test",
-    //     file: fs.createReadStream(`./_outpdut/bea-001.jpg`)
-    //   })
-    // } catch (error) {
-    //   console.log(error)
-    // }
     everyMinuteBot.everyMinuteAction({client: app.client});
   } catch (error) {
     console.error(error)

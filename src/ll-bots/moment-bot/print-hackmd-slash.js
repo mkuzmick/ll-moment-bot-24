@@ -2,8 +2,7 @@ const { llog } = require('../../ll-modules/ll-utilities')
 const randomMoment = require('./random-moment')
 const airtableTools = require(`../../ll-modules/ll-airtable-tools`)
 const puppeteer = require('puppeteer');
-const fs = require('fs').promises;
-const oldFs = require('fs');
+const fs = require('fs');
 var MarkdownIt = require('markdown-it');
 const axios = require('axios');
 
@@ -32,7 +31,7 @@ const printHackMdSlash = async ({ command, ack, client}) => {
         llog.yellow('response.data', response.data);
         md = new MarkdownIt();
         var htmlContent = md.render(response.data.content);
-        const cssStyles = await fs.readFile('./src/styles/avenir-white.css', 'utf-8');
+        const cssStyles = await fs.promises.readFile('./src/styles/avenir-white.css', 'utf-8');
         const fullHtml = `
             <html>
                 <head>
@@ -53,7 +52,7 @@ const printHackMdSlash = async ({ command, ack, client}) => {
         });
         await browser.close();
         // You can save the PDF buffer to a file or return as needed
-        await fs.writeFile(`./_output/output.pdf`, pdfBuffer);
+        await fs.promises.writeFile(`./_output/output.pdf`, pdfBuffer);
         const result = await client.chat.postMessage({
             channel: command.channel_id,
             text: "going to work on that",
@@ -65,7 +64,7 @@ const printHackMdSlash = async ({ command, ack, client}) => {
             await client.files.upload({
               channels: command.channel_id,
               initial_comment: "this is a test",
-              file: oldFs.createReadStream(`./_output/output.pdf`)
+              file: fs.createReadStream(`./_output/output.pdf`)
             })
           } catch (error) {
             console.log(error)

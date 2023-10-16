@@ -15,7 +15,6 @@ const momentEventListener =  async ({ event }) => {
             llog.cyan(JSON.stringify(event))
           }
           llog.red(event)
-                const result = await momentEventListener(event)
           let theRecord = {
               EventType: event.type,
               UserId: event.user || "NA",
