@@ -71,7 +71,9 @@ app.action(everything, momentBot.momentActionListener.log);
       channel: process.env.SLACK_TESTS_CHANNEL,
       text: `listening to these channels: ${JSON.stringify(BOT_CONFIG.map(e => e.fields.ChannelName), null, 4)}`
     })
-    everyMinuteBot.everyMinuteAction({client: app.client});
+    // uncomment for logging every minute
+    // TODO: handle this by toggling in slack (hold state here; default to off)
+    // everyMinuteBot.everyMinuteAction({client: app.client});
   } catch (error) {
     console.error(error)
   }

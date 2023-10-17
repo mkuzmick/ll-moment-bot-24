@@ -1,5 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
-
+const finetune = require('./finetune')
 
 module.exports.getListOfEngines = async function (options) {
     const configuration = new Configuration({
@@ -9,3 +9,5 @@ module.exports.getListOfEngines = async function (options) {
     const openai = new OpenAIApi(configuration);
     const response = await openai.listEngines();
 }
+
+module.exports.finetune = finetune
