@@ -1,4 +1,4 @@
-klet desiredConfig = "MK_CONFIG"
+let desiredConfig = "MK_CONFIG"
 let projectBookRecordId = "recK3EReWxSzOFSQC"
 
 const getConfig = async () => {
