@@ -1,5 +1,5 @@
 var cp = require('child_process');
-const { gray, magenta } = require('../utilities/mk-utilities');
+const { gray, magenta } = require('learninglab-log');
 var fs = require('fs');
 var path = require('path');
 const axios = require('axios')

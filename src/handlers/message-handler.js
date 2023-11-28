@@ -1,9 +1,9 @@
 const llog= require('learninglab-log')
 // add this logic back in somewhere to handle links
-const { resourceFromMessageLink } = require(`../resource-bot`);
-const makeGif = require(`../gif-bot/make-gif`);
-const momentBot = require(`../moment-bot`)
-const huntResponse = require('../open-ai-bot/hunt-response-1')
+const { resourceFromMessageLink } = require(`../bots/resource-bot`);
+const makeGif = require(`../bots/gif-bot/make-gif`);
+const momentBot = require(`../bots/moment-bot`)
+const huntResponse = require('../bots/open-ai-bot/hunt-response-1')
 exports.hello = async ({ message, say }) => {
     // say() sends a message to the channel where the event was triggered
     await say(`the bot is running, <@${message.user}>!`);

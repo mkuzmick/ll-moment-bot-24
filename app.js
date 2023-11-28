@@ -4,19 +4,21 @@ var fs = require('fs');
 
 global.ROOT_DIR = path.resolve(__dirname);
 
-require('dotenv').config();
+require('dotenv').config({
+  path: path.resolve(__dirname, `.env.${process.env.NODE_ENV}`)
+});
 
 const llog = require('learninglab-log');
 const { noBotMessages } = require('./src/utils/ll-slack-tools/middleware')
 const getAirtableConfig = require('./src/bots/config-bot/get-airtable-config')
-const messageHandler = require('./src/bots/index-bot/message-handler.js');
-const eventHandler = require('./src/bots/index-bot/event-handler.js');
+const messageHandler = require('./src/handlers/message-handler.js');
+const eventHandler = require('./src/handlers/event-handler.js');
 const momentBot = require('./src/bots/moment-bot');
 const openAiBot = require('./src/bots/open-ai-bot');
 const everyMinuteBot = require('./src/bots/every-minute-bot')
 // const slashHandler = require('./src/bots/index-bot/slash-handler.js');
 // const shortcutHandler = require('./src/bots/index-bot/shortcut-handler.js');
-const actionHandler = require('./src/bots/index-bot/action-handler.js');
+const actionHandler = require('./src/handlers/action-handler.js');
 // const handleSlateViewSubmission = require('./src/bots/slate-bot/handle-slate-view-submission');
 
 const logRe = /^log/;
@@ -28,14 +30,13 @@ const app = new App({
     socketMode: true,
     appToken: process.env.SLACK_APP_TOKEN,
     port: process.env.PORT || 3000
-  });
+});
 
 app.message('testing testing', messageHandler.hello);
 app.message(/.*/, noBotMessages, messageHandler.parseAll);
 
 app.command('/moment', momentBot.momentSlash);
 app.command('/print-hackmd', momentBot.printHackMdSlash);
-// app.command('/llaitest', )
 
 // app.event("file_shared", eventHandler.fileShared);
 app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);

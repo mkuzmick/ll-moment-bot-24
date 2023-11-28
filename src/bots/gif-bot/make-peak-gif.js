@@ -2,7 +2,7 @@ var cp = require("child_process");
 var path = require("path");
 var fs = require('fs');
 const csv = require('csv-parser');
-const { magenta, gray } = require("../utilities/mk-utilities");
+const { magenta, gray } = require("learninglab-log");
 
 async function ffprobe (videoFilePath){
   console.log("probing " + videoFilePath);

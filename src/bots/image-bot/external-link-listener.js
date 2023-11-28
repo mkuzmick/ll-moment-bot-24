@@ -1,4 +1,4 @@
-const airtableTools = require(`../utilities/airtable-tools`)
+const airtableTools = require(`../../utils/ll-airtable-tools`)
 
 function makeSlackImageURL (permalink, permalink_public) {
     let secrets = (permalink_public.split("slack-files.com/")[1]).split("-")

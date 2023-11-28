@@ -3,11 +3,11 @@ var Airtable = require('airtable');
 var fs = require('fs');
 var path = require('path');
 const { ConsoleLogger } = require('@slack/logger');
-const atemButtonBlocks = require('../atem-bot/atem-button-blocks')
-const hubButtonBlocks = require('../atem-bot/hub-button-blocks')
+const atemButtonBlocks = require('../bots/atem-bot/atem-button-blocks')
+const hubButtonBlocks = require('../bots/atem-bot/hub-button-blocks')
 const { llog } = require('../../ll-modules/ll-utilities')
-const studioStartup = require('../atem-bot/studio-startup')
-const liveLogBot = require('../live-log-bot')
+const studioStartup = require('../bots/atem-bot/studio-startup')
+const liveLogBot = require('../bots/live-log-bot')
 // const slateBot = require('../slate-bot')
 
 

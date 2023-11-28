@@ -1,12 +1,12 @@
 const { blue, yellow, cyan, magenta } = require('learninglab-log')
-const airtableTools = require(`../../utils/ll-airtable-tools`)
-const { handleSlackedFcpxml } =  require('../fcpxml-bot/fcpxml-tools')
+const airtableTools = require(`../utils/ll-airtable-tools`)
+const { handleSlackedFcpxml } =  require('../bots/fcpxml-bot/fcpxml-tools')
 const path = require('path')
 const appHomeHandler = require('./app-home-handler')
-const handleImageFile = require(`../image-bot/external-link-listener`)
-const makeGif = require('../gif-bot/make-gif')
+const handleImageFile = require(`../bots/image-bot/external-link-listener`)
+const makeGif = require('../bots/gif-bot/make-gif')
 // const { prepareStepArgs } = require('@slack/bolt/dist/WorkflowStep')
-const momentBot = require('../moment-bot')
+const momentBot = require('../bots/moment-bot')
 
 
 exports.fileShared = async ({ event, client}) => {
