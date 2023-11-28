@@ -6,18 +6,18 @@ global.ROOT_DIR = path.resolve(__dirname);
 
 require('dotenv').config();
 
-const llog = require('./src/ll-modules/ll-utilities/ll-logs')
-const { noBotMessages } = require('./src/ll-modules/ll-slack-tools/middleware')
-const getAirtableConfig = require('./src/ll-bots/config-bot/get-airtable-config')
-const messageHandler = require('./src/ll-bots/index-bot/message-handler.js');
-const eventHandler = require('./src/ll-bots/index-bot/event-handler.js');
-const momentBot = require('./src/ll-bots/moment-bot');
-const openAiBot = require('./src/ll-bots/open-ai-bot');
-const everyMinuteBot = require('./src/ll-bots/every-minute-bot')
-// const slashHandler = require('./src/ll-bots/index-bot/slash-handler.js');
-// const shortcutHandler = require('./src/ll-bots/index-bot/shortcut-handler.js');
-const actionHandler = require('./src/ll-bots/index-bot/action-handler.js');
-// const handleSlateViewSubmission = require('./src/ll-bots/slate-bot/handle-slate-view-submission');
+const llog = require('learninglab-log');
+const { noBotMessages } = require('./src/utils/ll-slack-tools/middleware')
+const getAirtableConfig = require('./src/bots/config-bot/get-airtable-config')
+const messageHandler = require('./src/bots/index-bot/message-handler.js');
+const eventHandler = require('./src/bots/index-bot/event-handler.js');
+const momentBot = require('./src/bots/moment-bot');
+const openAiBot = require('./src/bots/open-ai-bot');
+const everyMinuteBot = require('./src/bots/every-minute-bot')
+// const slashHandler = require('./src/bots/index-bot/slash-handler.js');
+// const shortcutHandler = require('./src/bots/index-bot/shortcut-handler.js');
+const actionHandler = require('./src/bots/index-bot/action-handler.js');
+// const handleSlateViewSubmission = require('./src/bots/slate-bot/handle-slate-view-submission');
 
 const logRe = /^log/;
 const everything = /.*/;
