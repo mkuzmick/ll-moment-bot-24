@@ -1,5 +1,5 @@
 const OpenAI = require("openai");
-const llog = require("../../ll-modules/ll-utilities/ll-logs")
+const llog = require("learninglab-log")
 const { spawnSync } = require('child_process');
 const path = require('path');
 const fs = require("fs");
