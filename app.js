@@ -74,7 +74,7 @@ app.action(everything, momentBot.momentActionListener.log);
     })
     // uncomment for logging every minute
     // TODO: handle this by toggling in slack (hold state here; default to off)
-    // everyMinuteBot.everyMinuteAction({client: app.client});
+    everyMinuteBot.everyMinuteAction({client: app.client});
   } catch (error) {
     console.error(error)
   }
