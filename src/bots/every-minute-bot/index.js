@@ -4,6 +4,7 @@ const path = require('path')
 const OpenAI = require("openai");
 const { spawnSync } = require('child_process');
 const fs = require("fs");
+const airtableTools = require('../../utils/ll-airtable-tools')
 
 const everyminuteBotIcon = "https://files.slack.com/files-pri/T0HTW3H0V-F067VR9KJCE/every-minute-bot.jpg?pub_secret=964e623d94"
 
@@ -16,10 +17,8 @@ function timestamp() {
            now.getMinutes().toString().padStart(2, '0') +
            now.getSeconds().toString().padStart(2, '0') + '.' +
            now.getMilliseconds().toString().padStart(3, '0');
-  }
+}
   
-  
-
 function extractDateTimeFromPath(path) {
     const match = path.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})\.mov$/);
     
@@ -85,6 +84,7 @@ const transcribeFile = async function (options) {
 }
 
 const everyMinuteAction = async ({client}) => {
+    llog.blue("everyMinuteBot is live")
     var watcher = chokidar.watch(process.env.OBS_CAPTURE_FOLDER, {
         ignored: /\.DS_Store/, 
         persistent: true, 
@@ -97,7 +97,7 @@ const everyMinuteAction = async ({client}) => {
         .on('add', async function(file) {
             console.log('File', file, 'has been added');
             if (path.extname(file) == ".mov") {
-                llog.yellow(file, `is a movie and was added at ${timestamp()}`);
+                llog.yellow(`${file} is a movie and was added at ${timestamp()}`);
                 
             } else {
                 console.log(`some other file: ${file}`)
@@ -111,21 +111,24 @@ const everyMinuteAction = async ({client}) => {
                 if (hasTimeElapsed(file, (1 * 60) * 1000)) { // 1 minute and 10 seconds in milliseconds
                     console.log(`More than 1 minute has elapsed since the video timestamp.`);
                     console.log('File', file, 'has been changed, about to transcribe');
-                    // const transcriptionResult = await transcribeFile({ filePath: file })
-                    // llog.magenta(transcriptionResult)
-                    // llog.blue(transcriptionResult.text)
+                    const transcriptionResult = await transcribeFile({ filePath: file })
+                    llog.magenta(transcriptionResult)
+                    llog.blue(transcriptionResult.text)
                     // const frenchResult = await frenchResponse(transcriptionResult.text)
                     // const slackResult = await client.chat.postMessage({
                     //     channel: process.env.SLACK_EVERY_MINUTE_IN_FRENCH_CHANNEL,
                     //     text: frenchResult.choices[0].message.content
                     // })
-                    // const slackResult = await client.chat.postMessage({
-                    //     channel: process.env.SLACK_EVERY_MINUTE_CHANNEL,
-                    //     text: transcriptionResult.text,
-                    //     icon_url: everyminuteBotIcon,
-                    //     username: "Every Minute Bot"
+                    const slackEveryMinuteChannelResult = await client.chat.postMessage({
+                        channel: process.env.SLACK_EVERY_MINUTE_CHANNEL,
+                        text: transcriptionResult.text ? transcriptionResult.text : "nothing happening right now",
+                        icon_url: everyminuteBotIcon,
+                        username: "Every Minute Bot"
+                    })
+                    // const airtableResult = await minuteToAirtable({
+                    //     slackData: slackEveryMinuteChannelResult,
+                    //     openAiData: transcriptionResult
                     // })
-
 
 
                 } else {
@@ -145,3 +148,20 @@ const everyMinuteAction = async ({client}) => {
 module.exports.everyMinuteAction = everyMinuteAction
 
 
+
+
+const minuteToAirtable = async ({ slackData, openAiData }) => {
+    let theRecord = {
+        SlackTs: message.ts,
+        Text: message.text || "",
+        UserId: message.user,
+        SlackChannel: message.channel,
+        SlackJSON: JSON.stringify(message, null, 4)
+    }
+    let theResult = await airtableTools.addRecord({
+        baseId: process.env.AIRTABLE_MOMENTS_BASE,
+        table: "SlackMessages",
+        record: theRecord
+    })
+    return(theResult)
+}
