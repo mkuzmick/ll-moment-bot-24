@@ -1,11 +1,11 @@
 const { Atem } = require('atem-connection');
 
 
-const atemTools = require(`../../ll-modules/ll-blackmagic-tools`)
+const atemTools = require(`../../utils/ll-blackmagic-tools`)
 var Airtable = require('airtable');
 var fs = require('fs');
 var path = require('path');
-const { llog } = require('../../ll-modules/ll-utilities')
+const { llog } = require('learninglab-log')
 
 
 const studioStartup = async ({ command, ack, say }) => {

@@ -1,15 +1,16 @@
-const atemTools = require(`../../ll-modules/ll-blackmagic-tools`)
+const atemTools = require(`../utils/ll-blackmagic-tools`)
 var Airtable = require('airtable');
 var fs = require('fs');
 var path = require('path');
-const { ConsoleLogger } = require('@slack/logger');
 const atemButtonBlocks = require('../bots/atem-bot/atem-button-blocks')
 const hubButtonBlocks = require('../bots/atem-bot/hub-button-blocks')
-const { llog } = require('../../ll-modules/ll-utilities')
+const llog = require('learninglab-log')
 const studioStartup = require('../bots/atem-bot/studio-startup')
 const liveLogBot = require('../bots/live-log-bot')
+const imagineBot = require('../bots/imagine-bot');
 // const slateBot = require('../slate-bot')
 
+exports.imagineBot = imagineBot;
 
 exports.switch = async ({ command, ack, say }) => {
     ack();

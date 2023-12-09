@@ -16,7 +16,7 @@ const eventHandler = require('./src/handlers/event-handler.js');
 const momentBot = require('./src/bots/moment-bot');
 const openAiBot = require('./src/bots/open-ai-bot');
 const everyMinuteBot = require('./src/bots/every-minute-bot')
-// const slashHandler = require('./src/bots/index-bot/slash-handler.js');
+const slashHandler = require('./src/handlers/slash-handler.js');
 // const shortcutHandler = require('./src/bots/index-bot/shortcut-handler.js');
 const actionHandler = require('./src/handlers/action-handler.js');
 // const handleSlateViewSubmission = require('./src/bots/slate-bot/handle-slate-view-submission');
@@ -29,7 +29,7 @@ const app = new App({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     socketMode: true,
     appToken: process.env.SLACK_APP_TOKEN,
-    port: process.env.PORT || 3000
+    // port: process.env.PORT || 3000
 });
 
 app.message('testing testing', messageHandler.hello);
@@ -37,6 +37,7 @@ app.message(/.*/, noBotMessages, messageHandler.parseAll);
 
 app.command('/moment', momentBot.momentSlash);
 app.command('/print-hackmd', momentBot.printHackMdSlash);
+app.command('/imagine', slashHandler.imagineBot)
 
 // app.event("file_shared", eventHandler.fileShared);
 app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);
