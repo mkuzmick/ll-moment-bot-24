@@ -6,6 +6,7 @@ const llog = require('learninglab-log')
 
 const momentEventListener =  async ({ event }) => {
     const handledEvents = ["message","reaction_added", "reaction_removed", "app_home_opened", "file_shared"]
+    llog.yellow(event, llog.divider)
     try {
         if (handledEvents.includes(event.type)) {
             llog.blue(`got an event of type ${event.type}, handling this elsewhere`)

@@ -1,4 +1,4 @@
-const { red, blue, magenta, yellow, divider, gray, darkgray, cyan } = require('../utilities/ll-logs')
+const { red, blue, magenta, yellow, divider, gray, darkgray, cyan } = require('learninglab-log')
 
 const macros = [
     {

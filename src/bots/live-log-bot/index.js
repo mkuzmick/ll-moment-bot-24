@@ -1,5 +1,5 @@
-const airtableTools = require(`../../ll-modules/ll-airtable-tools`)
-const { llog } = require('../../ll-modules/ll-utilities')
+const airtableTools = require(`../../utils/ll-airtable-tools`)
+const llog = require('learninglab-log')
 const randomLogger = require('./random-logger.js')
   
 const liveLogBot = async ({ command, ack, client }) => {

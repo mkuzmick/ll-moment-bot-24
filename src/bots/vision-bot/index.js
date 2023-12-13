@@ -5,16 +5,10 @@ const path = require('path');
 const fs = require("fs");
 
 
-
-
-  
-
-
 module.exports = async function ({client, event, say}) {
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY, 
     });
-
 
     let start = new Date().getTime(); // Get current time in milliseconds
     let firstResult = await say("working on it...")
