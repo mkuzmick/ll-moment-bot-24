@@ -1,17 +1,17 @@
 {
     "display_information": {
-        "name": "ll-moment-bot",
-        "description": "a bot that handles moments",
-        "background_color": "#111112"
+        "name": "ll-moment-bot-x",
+        "description": "a bot that handles moments (experimental)",
+        "background_color": "#131214"
     },
     "features": {
         "app_home": {
-            "home_tab_enabled": true,
-            "messages_tab_enabled": false,
+            "home_tab_enabled": false,
+            "messages_tab_enabled": true,
             "messages_tab_read_only_enabled": false
         },
         "bot_user": {
-            "display_name": "ll-moment-bot",
+            "display_name": "ll-moment-bot-x",
             "always_online": true
         },
         "slash_commands": [
@@ -20,6 +20,17 @@
                 "description": "registers a moment",
                 "usage_hint": "[title or tags]",
                 "should_escape": false
+            },
+            {
+                "command": "/print-hackmd",
+                "description": "converts hackmd to pdf",
+                "usage_hint": "[hackmdURL]",
+                "should_escape": false
+            },
+            {
+                "command": "/imagine",
+                "description": "simulates imagine",
+                "should_escape": false
             }
         ]
     },
@@ -27,30 +38,37 @@
         "scopes": {
             "user": [
                 "files:read",
-                "files:write"
+                "files:write",
+                "chat:write"
             ],
             "bot": [
-                "files:read",
-                "files:write",
-                "reactions:read",
-                "reactions:write",
+                "app_mentions:read",
                 "channels:history",
                 "channels:read",
                 "chat:write",
-                "app_mentions:read",
+                "commands",
                 "emoji:read",
+                "files:read",
+                "files:write",
                 "groups:history",
                 "groups:read",
-                "im:write",
-                "im:read",
                 "im:history",
+                "im:read",
+                "im:write",
+                "links:read",
                 "mpim:history",
-                "mpim:write",
                 "mpim:read",
+                "mpim:write",
+                "pins:read",
+                "reactions:read",
+                "reactions:write",
                 "reminders:read",
                 "reminders:write",
-                "commands",
-                "pins:read"
+                "remote_files:write",
+                "chat:write.customize",
+                "groups:write.topic",
+                "groups:write",
+                "groups:write.invites"
             ]
         }
     },
@@ -64,6 +82,7 @@
                 "file_public",
                 "file_shared",
                 "file_unshared",
+                "link_shared",
                 "message.channels",
                 "message.groups",
                 "message.im",
