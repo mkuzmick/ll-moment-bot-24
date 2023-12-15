@@ -1,124 +1,125 @@
-const atemTools = require(`../../ll-modules/ll-blackmagic-tools`)
+// const atemTools = require(`../utils/ll-blackmagic-tools`)
 var Airtable = require('airtable');
 var fs = require('fs');
 var path = require('path');
-const { ConsoleLogger } = require('@slack/logger');
-const atemButtonBlocks = require('../bots/atem-bot/atem-button-blocks')
-const hubButtonBlocks = require('../bots/atem-bot/hub-button-blocks')
-const { llog } = require('../../ll-modules/ll-utilities')
-const studioStartup = require('../bots/atem-bot/studio-startup')
-const liveLogBot = require('../bots/live-log-bot')
+// const atemButtonBlocks = require('../bots/atem-bot/atem-button-blocks')
+// const hubButtonBlocks = require('../bots/atem-bot/hub-button-blocks')
+const llog = require('learninglab-log')
+// const studioStartup = require('../bots/atem-bot/studio-startup')
+// const liveLogBot = require('../bots/live-log-bot')
+const imagineBot = require('../bots/imagine-bot');
 // const slateBot = require('../slate-bot')
 
+exports.imagineBot = imagineBot;
 
-exports.switch = async ({ command, ack, say }) => {
-    ack();
-    console.log(JSON.stringify(command, null, 4))
-    console.log(`let's try a simple switch to camera ${command.text}`)
-    await atemTools.switchCamera({
-        atemIp: process.env.A8K_IP,
-        camera: command.text
-    })
-}
+// exports.switch = async ({ command, ack, say }) => {
+//     ack();
+//     console.log(JSON.stringify(command, null, 4))
+//     console.log(`let's try a simple switch to camera ${command.text}`)
+//     await atemTools.switchCamera({
+//         atemIp: process.env.A8K_IP,
+//         camera: command.text
+//     })
+// }
 
-exports.macro = async ({ command, ack, say }) => {
-    ack();
-    console.log(JSON.stringify(command, null, 4))
-    console.log(`running macro ${command.text}`)
-    await atemTools.macro({
-        atemIp: process.env.A8K_IP,
-        macro: command.text
-    })
-}
+// exports.macro = async ({ command, ack, say }) => {
+//     ack();
+//     console.log(JSON.stringify(command, null, 4))
+//     console.log(`running macro ${command.text}`)
+//     await atemTools.macro({
+//         atemIp: process.env.A8K_IP,
+//         macro: command.text
+//     })
+// }
 
-exports.atemButtons = async ({ command, client, ack, say }) => {
-    ack();
-    try {
-        llog.red(command, null, 4)
-        console.log(`let's try a simple switch to camera ${command.text}`)
-        const blx = await atemButtonBlocks()
-        llog.blue(blx)
-        if (command.channel_name !== "directmessage") {
-            await say({
-                blocks: blx,
-                text: `this game requires blocks`
-            })
-        } else {
-            await client.chat.postMessage({
-                blocks: blx,
-                channel: command.user_id,
-                text: `this game requires blocks`
-            })
-        }
-    } catch (error) {
-        llog.red(error)
-    }
+// exports.atemButtons = async ({ command, client, ack, say }) => {
+//     ack();
+//     try {
+//         llog.red(command, null, 4)
+//         console.log(`let's try a simple switch to camera ${command.text}`)
+//         const blx = await atemButtonBlocks()
+//         llog.blue(blx)
+//         if (command.channel_name !== "directmessage") {
+//             await say({
+//                 blocks: blx,
+//                 text: `this game requires blocks`
+//             })
+//         } else {
+//             await client.chat.postMessage({
+//                 blocks: blx,
+//                 channel: command.user_id,
+//                 text: `this game requires blocks`
+//             })
+//         }
+//     } catch (error) {
+//         llog.red(error)
+//     }
     
-}
+// }
 
 
-exports.hub =  async ({ command, client, ack, say }) => {
-    ack();
-    try {
-        llog.blue(command, null, 4)
-        console.log(`hub command ${command.text}`)
-        const blx = await hubButtonBlocks()
-        llog.blue(blx)
-        if (command.channel_name !== "directmessage") {
-            await say({
-                blocks: blx,
-                text: `this game requires blocks`
-            })
-        } else {
-            await client.chat.postMessage({
-                blocks: blx,
-                channel: command.user_id,
-                text: `this game requires blocks`
-            })
-        }
-    } catch (error) {
-        llog.red(error)
-    }
+// exports.hub =  async ({ command, client, ack, say }) => {
+//     ack();
+//     try {
+//         llog.blue(command, null, 4)
+//         console.log(`hub command ${command.text}`)
+//         const blx = await hubButtonBlocks()
+//         llog.blue(blx)
+//         if (command.channel_name !== "directmessage") {
+//             await say({
+//                 blocks: blx,
+//                 text: `this game requires blocks`
+//             })
+//         } else {
+//             await client.chat.postMessage({
+//                 blocks: blx,
+//                 channel: command.user_id,
+//                 text: `this game requires blocks`
+//             })
+//         }
+//     } catch (error) {
+//         llog.red(error)
+//     }
     
-}
+// }
 
 
 
-exports.a8ksync = async ({ command, ack, say }) => {
-    ack();
-    console.log(JSON.stringify(command, null, 4))
-    console.log(`let's sync the atem to server time`)
-    await atemTools.syncAtemToClock({
-        atemIp: process.env.A8K_IP,
-        cb: async (time) => {
-            await say(`syncing to ${time}`)
-        }
-    })
-}
+// exports.a8ksync = async ({ command, ack, say }) => {
+//     ack();
+//     console.log(JSON.stringify(command, null, 4))
+//     console.log(`let's sync the atem to server time`)
+//     await atemTools.syncAtemToClock({
+//         atemIp: process.env.A8K_IP,
+//         cb: async (time) => {
+//             await say(`syncing to ${time}`)
+//         }
+//     })
+// }
 
 
 
-exports.hundredStills = async ({ command, ack, say }) => {
-    ack();
-    const theRecords = await findManyByValue({
-        field: "DateByFormula",
-        value: command.text,
-        table: "StillsRequests"
-    })
-    var theEDL = `TITLE: the-${command.text}-stills\nFCM: NON-DROP FRAME\n\n`
-    for (let i = 0; i < theRecords.length; i++) {
-        const element = theRecords[i];
-        // console.log(JSON.stringify(element, null, 4));
-        theEDL+=`${(i+1).toString().padStart(3, "0")}  AX       V     C        ${inTc(element.fields.Timecode)} ${outTc(element.fields.Timecode)} ${framesToTimecode(i)} ${framesToTimecode(i+1)}\n* FROM CLIP NAME: ${element.fields.VideoFileName}\n\n`
-    }
-    const pathForEDL = path.join(process.env.EXPORTS_FOLDER, `the-${command.text}-stills-${Date.now()}.edl`)
-    await say(`we'll get your EDL from ${command.text} and we'll save it here: ${pathForEDL}. Head over to the Main Mac Studio to import it into resolve.`)
-    await fs.writeFileSync(pathForEDL, theEDL)
-}
+// exports.hundredStills = async ({ command, ack, say }) => {
+//     ack();
+//     const theRecords = await findManyByValue({
+//         field: "DateByFormula",
+//         value: command.text,
+//         table: "StillsRequests"
+//     })
+//     var theEDL = `TITLE: the-${command.text}-stills\nFCM: NON-DROP FRAME\n\n`
+//     for (let i = 0; i < theRecords.length; i++) {
+//         const element = theRecords[i];
+//         // console.log(JSON.stringify(element, null, 4));
+//         theEDL+=`${(i+1).toString().padStart(3, "0")}  AX       V     C        ${inTc(element.fields.Timecode)} ${outTc(element.fields.Timecode)} ${framesToTimecode(i)} ${framesToTimecode(i+1)}\n* FROM CLIP NAME: ${element.fields.VideoFileName}\n\n`
+//     }
+//     const pathForEDL = path.join(process.env.EXPORTS_FOLDER, `the-${command.text}-stills-${Date.now()}.edl`)
+//     await say(`we'll get your EDL from ${command.text} and we'll save it here: ${pathForEDL}. Head over to the Main Mac Studio to import it into resolve.`)
+//     await fs.writeFileSync(pathForEDL, theEDL)
+// }
 
-exports.rocket = async ({ message, say }) => {
-    await say(`thanks for the :rocket:, <@${message.user}>`);
-}
+// exports.rocket = async ({ message, say }) => {
+//     await say(`thanks for the :rocket:, <@${message.user}>`);
+// }
 
 
 const findManyByValue = async function(options) {
@@ -164,5 +165,5 @@ const outTc = (atc) => {
 }
 
 
-exports.log = liveLogBot
-exports.studiostartup = studioStartup
+// exports.log = liveLogBot
+// exports.studiostartup = studioStartup
