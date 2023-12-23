@@ -1,5 +1,5 @@
 const llog = require('learninglab-log');
-const createFormView = require('./create-form-view');
+const createFormView = require('./pokemon-form-view');
 
 module.exports = async ({ command, ack, say, client }) => {
     ack();

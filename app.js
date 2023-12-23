@@ -39,7 +39,7 @@ app.message(/.*/, noBotMessages, messageHandler.parseAll);
 app.command('/moment', momentBot.momentSlash);
 app.command('/print-hackmd', momentBot.printHackMdSlash);
 app.command('/imagine', slashHandler.imagineSlash);
-app.command('/pokemon', pokemonBot.handleSlash);
+app.command('/pokemon', pokemonBot.slash);
 
 // app.event("file_shared", eventHandler.fileShared);
 app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);
@@ -54,7 +54,7 @@ app.view(/.*/, sl.views);
 
 app.action(everything, actionHandler.log);
 
-app.view(/pokemon_submission/, pokemonBot.handleViewSubmission);
+app.view(/pokemon_submission/, pokemonBot.viewSubmission);
 
 // app.shortcut(`show_your_work`, shortcutHandler.showYourWork);
 // app.shortcut(/.*/, shortcutHandler.log);
