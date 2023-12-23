@@ -1,9 +1,6 @@
 const airtableTools = require(`../../utils/ll-airtable-tools`)
 const llog = require('learninglab-log')
 
-
-
-
 const momentEventListener =  async ({ event }) => {
     const handledEvents = ["message","reaction_added", "reaction_removed", "app_home_opened", "file_shared"]
     try {

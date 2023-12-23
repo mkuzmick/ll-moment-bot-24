@@ -8,9 +8,11 @@ const llog = require('learninglab-log')
 // const studioStartup = require('../bots/atem-bot/studio-startup')
 // const liveLogBot = require('../bots/live-log-bot')
 const imagineBot = require('../bots/imagine-bot');
+const pokemonBot = require('../bots/pokemon-bot');
 // const slateBot = require('../slate-bot')
 
-exports.imagineBot = imagineBot;
+exports.imagineSlash = imagineBot;
+exports.pokemonSlash = pokemonBot.handleSlash;
 
 // exports.switch = async ({ command, ack, say }) => {
 //     ack();

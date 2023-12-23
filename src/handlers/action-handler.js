@@ -48,3 +48,11 @@ module.exports.atemButtons = async ({ payload, body, context, ack }) => {
         }
     )
 }
+
+
+module.exports.pokemonSubmission = async ({ payload, body, context, ack }) => {
+    yellow("pokemon submission")
+    await ack()
+    blue("pokemon submission", payload)
+    // yellow(body)
+}

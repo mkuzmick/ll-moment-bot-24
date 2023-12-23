@@ -9,8 +9,8 @@ const slashHandler = require('./src/slack-event-handlers/slash-handler.js');
 const shortcutHandler = require('./src/slack-event-handlers/shortcut-handler.js');
 const actionHandler = require('./src/slack-event-handlers/action-handler.js');
 const appHomeHandler = require(`./src/slack-event-handlers/app-home-handler`)
-
-const mw = require(`./src/slack-event-handlers/slack-middleware`)
+const viewHandler = require('./src/slack-event-handlers/view-handler.js');
+const mw = require(`./src/slack-event-handlers/slack-middleware`);
 
 
 const app = new App({
@@ -50,7 +50,19 @@ app.event(/.*/, eventHandler.log);
 // app.shortcut(`send_me_markdown`, shortcutHandler.sendMeMarkdown);
 // app.shortcut(/.*/, shortcutHandler.log);
 
-// app.action(/.*/, actionHandler.log);
+app.action(/.*/, actionHandler.log);
+
+app.view(/.*/, async ({ body, view, ack }) => { 
+    ack();
+    yellow('got any view')
+    darkgray(divider, "view", divider)
+    darkgray(divider, "view", view)
+    darkgray(divider, "view", divider)
+    darkgray(divider, "body", body)
+});
+
+app.view(/pokemon_submission/, );
+
 
 (async () => {
   await app.start(process.env.PORT || 3000);

@@ -7,3 +7,4 @@ module.exports.momentBot = require('./moment-bot');
 module.exports.openAiBot = require('./open-ai-bot');
 module.exports.everyMinuteBot = require('./every-minute-bot');
 module.exports.directorBot = require('./director-bot');
+module.exports.pokemonBot = require('./pokemon-bot');

@@ -9,14 +9,15 @@ require('dotenv').config({
 });
 
 const llog = require('learninglab-log');
-const { noBotMessages } = require('./src/utils/ll-slack-tools/middleware')
-const getAirtableConfig = require('./src/bots/config-bot/get-airtable-config')
+const { pokemonBot, everyMinuteBot, momentBot, openAiBot } = require('./src/bots/index.js');
+const sl = require('./src/utils/ll-slack-tools/utils/slack-logs.js');
+
+const { noBotMessages } = require('./src/utils/ll-slack-tools/middleware');
+const getAirtableConfig = require('./src/bots/config-bot/get-airtable-config');
 const messageHandler = require('./src/handlers/message-handler.js');
 const eventHandler = require('./src/handlers/event-handler.js');
-const momentBot = require('./src/bots/moment-bot');
-const openAiBot = require('./src/bots/open-ai-bot');
-const everyMinuteBot = require('./src/bots/every-minute-bot')
 const slashHandler = require('./src/handlers/slash-handler.js');
+const viewHandler = require('./src/handlers/view-handler.js');
 // const shortcutHandler = require('./src/bots/index-bot/shortcut-handler.js');
 const actionHandler = require('./src/handlers/action-handler.js');
 // const handleSlateViewSubmission = require('./src/bots/slate-bot/handle-slate-view-submission');
@@ -37,7 +38,8 @@ app.message(/.*/, noBotMessages, messageHandler.parseAll);
 
 app.command('/moment', momentBot.momentSlash);
 app.command('/print-hackmd', momentBot.printHackMdSlash);
-app.command('/imagine', slashHandler.imagineBot);
+app.command('/imagine', slashHandler.imagineSlash);
+app.command('/pokemon', pokemonBot.handleSlash);
 
 // app.event("file_shared", eventHandler.fileShared);
 app.event("reaction_added", momentBot.momentReactionListener.reactionAdded);
@@ -46,13 +48,13 @@ app.event("reaction_removed", momentBot.momentReactionListener.reactionRemoved);
 // app.event('pin_removed', eventHandler.pinRemoved);
 // app.event('app_home_opened', eventHandler.appHomeOpened);
 // app.event('message', eventHandler.message);
-app.event(/.*/, momentBot.momentEventListener);
 
-app.action(everything, momentBot.momentActionListener.log);
-// app.action(/atem/, actionHandler.atemButtons)
-// app.action(logRe, actionHandler.liveLogger);
+app.event(/.*/, sl.events);
+app.view(/.*/, sl.views);
 
-// app.view(/slate_submission/, handleSlateViewSubmission)
+app.action(everything, actionHandler.log);
+
+app.view(/pokemon_submission/, pokemonBot.handleViewSubmission);
 
 // app.shortcut(`show_your_work`, shortcutHandler.showYourWork);
 // app.shortcut(/.*/, shortcutHandler.log);
